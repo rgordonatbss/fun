@@ -92,7 +92,13 @@ void keyPressed() {
     visualize = true;
     refresh();
   }
-  
+
+  // Export a PNG file of the on-screen image when 's' is pressed.
+  // Will be created in same folder as the .PDE file
+  if (key == 's') {
+    saveFrame("Perlin-map-2D-####.png");
+  }
+ 
   // Change position in 2D Perlin noise space based on keypresses
   if (key == CODED) {
     if (keyCode == RIGHT && xStart < 94) {
