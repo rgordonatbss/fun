@@ -71,7 +71,7 @@ void draw() {
 // Responds when keyboard keys are pressed.
 void keyPressed() {
 
-  // Export a PNG file of the on-scren image when 's' is pressed.
+  // Export a PNG file of the on-screen image when 's' is pressed.
   // Will be created in same folder as the .PDE file
   if (key == 's') {
     saveFrame("clouds-########.png");
