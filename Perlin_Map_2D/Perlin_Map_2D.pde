@@ -7,6 +7,7 @@
 // Fonts
 PFont serifItalic;
 PFont serif;
+PFont sansSerif;
 
 // Flag for what type of random noise to show
 boolean usePerlin = true;
@@ -33,7 +34,7 @@ float yOffset = 0.0;
 void setup() {
 
   // Create canvas
-  size(1000, 800);
+  size(1400, 800);
 
   // White background
   background(255);
@@ -41,9 +42,13 @@ void setup() {
   // Set fonts
   serif = loadFont("Times-Roman-24.vlw");
   serifItalic = loadFont("Times-Italic-24.vlw");
+  sansSerif = loadFont("Calibri-24.vlw");
 
   // Set noise detail for Perlin noise generator
   noiseDetail(8, 0.6);
+
+  // Draw the help text
+  drawHelpText();
 
   // Draw the axes
   drawAxes();
@@ -98,7 +103,7 @@ void keyPressed() {
   if (key == 's') {
     saveFrame("Perlin-map-2D-####.png");
   }
- 
+
   // Change position in 2D Perlin noise space based on keypresses
   if (key == CODED) {
     if (keyCode == RIGHT && xStart < 94) {
@@ -157,6 +162,7 @@ void keyPressed() {
 void refresh() {
   // Re-draw grid
   background(255);
+  drawHelpText();
   drawAxes();
   drawValues();
   redraw();
@@ -168,6 +174,9 @@ void refresh() {
 //
 // Parameters: (none)
 void drawAxes() {
+
+  // Shift everything around a bit to centre the values
+  translate(width/42, height/36);
 
   // Draw axes
   stroke(0); // black
@@ -232,11 +241,16 @@ void drawValues() {
         fill(125); // grey
         if (usePerlin) {
           yL = String.format("%.3f", yOffset);
-          text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+          if (yStart > 9) {
+            text(yL, width/7 - gridWhiteSpaceWidth*(x+2)/32*27 - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+          } 
+          else {
+            text(yL, width/7 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+          }
         } 
         else {
           yL = String.format("%3d", y + 1);
-          text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth/7*5, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+          text(yL, width/7 - gridWhiteSpaceWidth*(x+2) - gridNumberWidth/7*5, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
         }
       }
 
@@ -254,11 +268,34 @@ void drawValues() {
       String s = String.format("%.3f", noiseValue);
       if (visualize) {
         fill(255-noiseValue*255); // black is high, white is low
-      } else {
+      } 
+      else {
         fill(0); // black is high, white is low
       }
       text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
-      
     }
   }
+}
+
+// drawHelpText
+//
+// Purpose: Draws the instructions on screen.
+//
+// Parameters:     (none)
+void drawHelpText() {
+
+  // Box with pale yellow fill
+  noStroke();
+  fill(255, 253, 222); // pale yellow
+  rect(0, 0, width, height/12);
+
+  // Separating line
+  stroke(100);
+  strokeWeight(2);
+  line(0, height/12, width, height/12);
+
+  // Help text
+  textFont(sansSerif);
+  fill(100);
+  text("Use arrow keys to move through Perlin noise space. R: random noise. P: Perlin noise. C/V: Toggle visualization. [/]: Change Perlin increment.", width/120, height/20);
 }
