@@ -248,11 +248,11 @@ void drawValues() {
       String s = String.format("%.3f", noiseValue);
       if (visualize) {
         fill(255-noiseValue*255); // black is high, white is low
-        stroke(0);
-        text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*3.2 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y, gridNumberWidth*1.1, gridNumberHeight*1.1);
       } else {
-        text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+        fill(0); // black is high, white is low
       }
+      text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+      
     }
   }
 }
