@@ -11,6 +11,9 @@ PFont serif;
 // Flag for what type of random noise to show
 boolean usePerlin = true;
 
+// Flag for whether to fill text areas to visualize Perlin noise values mapped to a grayscale fill
+boolean visualize = true;
+
 // How much of a jump through Perlin noise space to make
 float increment = 0.004;
 
@@ -56,13 +59,18 @@ void setup() {
 void draw() {
 }
 
-// This function responds when keyboard keys are pressed.
+// keyPressed 
+//
+// Purpose: This function responds when keyboard keys are pressed.
 //
 // r: show regular random noise
 // p: show Perlin noise
 // arrow keys: move along x and y axes in Perlin noise space
 // ]: increase the increment or "size of the leap" through Perlin noise space
 // [: decrease the increment used for moving through Perlin noise space
+// c: show noise values without visualization
+// v: show nosie values with visualization
+//
 void keyPressed() {
 
   // Toggle display of Perlin noise values versus random values
@@ -75,9 +83,19 @@ void keyPressed() {
     refresh();
   }
 
+  // Toggle display of Perlin noise values with visualization
+  if (key == 'c') {
+    visualize = false;
+    refresh();
+  } 
+  else if (key == 'v') {
+    visualize = true;
+    refresh();
+  }
+  
   // Change position in 2D Perlin noise space based on keypresses
   if (key == CODED) {
-    if (keyCode == RIGHT && xStart < 99) {
+    if (keyCode == RIGHT && xStart < 94) {
       xStart++;
       refresh();
     }
@@ -85,7 +103,7 @@ void keyPressed() {
       xStart--;
       refresh();
     }
-    if (keyCode == UP && yStart < 99) {
+    if (keyCode == UP && yStart < 94) {
       yStart++;
       refresh();
     }
@@ -99,9 +117,11 @@ void keyPressed() {
   if (key == 93) { // ']' key: increase increment
     if (increment >= 0.001 && increment < 0.01) {
       increment += 0.001;
-    } else if (increment > 0.009 && increment < 0.1) {
+    } 
+    else if (increment > 0.009 && increment < 0.1) {
       increment += 0.01;
-    } else if (increment > 0.09 && increment < 0.5) {
+    } 
+    else if (increment > 0.09 && increment < 0.5) {
       increment += 0.1;
     }
     //println("] " + increment); // DEBUG
@@ -110,16 +130,17 @@ void keyPressed() {
   if (key == 91) { // '[' key: decrease increment
     if (increment >= 0.002 && increment <= 0.011) {
       increment -= 0.001;
-    } else if (increment > 0.011 && increment <= 0.11) {
+    } 
+    else if (increment > 0.011 && increment <= 0.11) {
       increment -= 0.01;
-    } else if (increment > 0.09 && increment <= 0.51) {
+    } 
+    else if (increment > 0.09 && increment <= 0.51) {
       increment -= 0.1;
     }
     //println("] " + increment); // DEBUG
     refresh();
   }
   //println(keyCode); // DEBUG
-  
 }
 
 // refresh
@@ -225,7 +246,13 @@ void drawValues() {
       // Show value
       fill(0); // black
       String s = String.format("%.3f", noiseValue);
-      text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+      if (visualize) {
+        fill(255-noiseValue*255); // black is high, white is low
+        stroke(0);
+        text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*3.2 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y, gridNumberWidth*1.1, gridNumberHeight*1.1);
+      } else {
+        text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+      }
     }
   }
 }
