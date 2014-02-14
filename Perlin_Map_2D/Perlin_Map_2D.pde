@@ -37,7 +37,7 @@ void setup() {
 
   // How much of a jump through Perlin noise space to make
   float increment = 0.004;
-  
+
   // How much to move left and up to display grid
   float gridNumberWidth = ((width - 2*(width/8)) / 12);
   float gridWhiteSpaceWidth = (2*gridNumberWidth / 10);
@@ -48,15 +48,18 @@ void setup() {
   float xOffset = 0.0;
 
   // Display a grid of the Perlin noise values
+  textFont(serif);
   for (int x = 0; x < 10; x++) {
-    
-    xOffset += increment; // Increment xoff with each additional column
-    float yOffset = 0.0;  // For every xoff, start yoff at 0 (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space) 
+
+    xOffset += increment; // Increment xOffset with each additional column
+    float yOffset = 0.0;  // For every xOffset (column), start yOffset at 0 (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space)
+
+    // Draw x-axis labels as we go
+    String l = String.format("%.3f", xOffset);
+    fill(125); // grey
+    text(l, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 + gridNumberHeight/3*2);
 
     // Get Perlin noise values along the y-axis for this x-axis value
-    textFont(serifItalic);
-    fill(0);
-
     for (int y = 0; y < 10; y++) {
 
       // Increment yOffset
@@ -66,8 +69,7 @@ void setup() {
       float noiseValue = noise(xOffset, yOffset);
 
       // Show value
-      textFont(serif);
-      fill(0);
+      fill(0); // black
       String s = String.format("%.3f", noiseValue);
       text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
     }
