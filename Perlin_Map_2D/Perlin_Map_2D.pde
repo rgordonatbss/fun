@@ -57,6 +57,12 @@ void draw() {
 }
 
 // This function responds when keyboard keys are pressed.
+//
+// r: show regular random noise
+// p: show Perlin noise
+// arrow keys: move along x and y axes in Perlin noise space
+// ]: increase the increment or "size of the leap" through Perlin noise space
+// [: decrease the increment used for moving through Perlin noise space
 void keyPressed() {
 
   // Toggle display of Perlin noise values versus random values
@@ -88,6 +94,32 @@ void keyPressed() {
       refresh();
     }
   }
+
+  // Change increment for how much to jump through 2D Perlin noise space
+  if (key == 93) { // ']' key: increase increment
+    if (increment >= 0.001 && increment < 0.01) {
+      increment += 0.001;
+    } else if (increment > 0.009 && increment < 0.1) {
+      increment += 0.01;
+    } else if (increment > 0.09 && increment < 0.5) {
+      increment += 0.1;
+    }
+    //println("] " + increment); // DEBUG
+    refresh();
+  }
+  if (key == 91) { // '[' key: decrease increment
+    if (increment >= 0.002 && increment <= 0.011) {
+      increment -= 0.001;
+    } else if (increment > 0.011 && increment <= 0.11) {
+      increment -= 0.01;
+    } else if (increment > 0.09 && increment <= 0.51) {
+      increment -= 0.1;
+    }
+    //println("] " + increment); // DEBUG
+    refresh();
+  }
+  //println(keyCode); // DEBUG
+  
 }
 
 // refresh
