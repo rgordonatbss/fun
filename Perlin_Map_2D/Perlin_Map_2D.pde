@@ -1,3 +1,9 @@
+/*
+ * To the extent possible under law, Russell Gordon has waived all copyright and related
+ * or neighboring rights to Perlin Map 2D illustration. This work is published from: Canada.
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ */
+
 // Fonts
 PFont serifItalic;
 PFont serif;
@@ -55,15 +61,22 @@ void setup() {
     float yOffset = 0.0;  // For every xOffset (column), start yOffset at 0 (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space)
 
     // Draw x-axis labels as we go
-    String l = String.format("%.3f", xOffset);
+    String xL = String.format("%.3f", xOffset);
     fill(125); // grey
-    text(l, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 + gridNumberHeight/3*2);
+    text(xL, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 + gridNumberHeight/3*2);
 
     // Get Perlin noise values along the y-axis for this x-axis value
     for (int y = 0; y < 10; y++) {
 
       // Increment yOffset
       yOffset += increment;
+
+      // Draw y-axis labels if we're on the first column
+      if (x == 0) {
+        String yL = String.format("%.3f", yOffset);
+        fill(125); // grey
+        text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+      }
 
       // Get noise value from Perlin noise space
       float noiseValue = noise(xOffset, yOffset);
