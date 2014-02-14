@@ -36,10 +36,10 @@ void setup() {
 
   // Draw the axes
   drawAxes();
-  
+
   // Draw the values
   drawValues();
-  
+
   // No need to loop
   noLoop();
 }
@@ -99,7 +99,7 @@ void drawAxes() {
 //
 // Parameters: (none)
 void drawValues() {
-  
+
   // How much to move left and up to display grid
   float gridNumberWidth = ((width - 2*(width/8)) / 12);
   float gridWhiteSpaceWidth = (2*gridNumberWidth / 10);
@@ -115,9 +115,16 @@ void drawValues() {
     float yOffset = 0.0;  // For every xOffset (column), start yOffset at 0 (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space)
 
     // Draw x-axis labels as we go
-    String xL = String.format("%.3f", xOffset);
     fill(125); // grey
-    text(xL, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 + gridNumberHeight/3*2);
+    String xL;
+    if (usePerlin) {
+      xL = String.format("%.3f", xOffset);
+      text(xL, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 + gridNumberHeight/3*2);
+    } 
+    else {
+      xL = String.format("%3d", x + 1);
+      text(xL, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x + gridWhiteSpaceWidth/2, height - height/8 + gridNumberHeight/3*2);
+    }
 
     // Get Perlin noise values along the y-axis for this x-axis value
     for (int y = 0; y < 10; y++) {
@@ -127,9 +134,16 @@ void drawValues() {
 
       // Draw y-axis labels if we're on the first column
       if (x == 0) {
-        String yL = String.format("%.3f", yOffset);
+        String yL;
         fill(125); // grey
-        text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+        if (usePerlin) {
+          yL = String.format("%.3f", yOffset);
+          text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+        } 
+        else {
+          yL = String.format("%3d", y + 1);
+          text(yL, width/8 - gridWhiteSpaceWidth*(x+1) - gridNumberWidth/7*5, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
+        }
       }
 
       // Get noise values
@@ -147,5 +161,4 @@ void drawValues() {
       text(s, width/8 + gridWhiteSpaceWidth*(x+1) + gridNumberWidth*x, height - height/8 - gridWhiteSpaceHeight*1.5 - gridWhiteSpaceHeight*(y+1) - gridNumberHeight*y);
     }
   }
-  
 }
