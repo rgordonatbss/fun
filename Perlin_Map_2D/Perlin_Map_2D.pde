@@ -14,9 +14,17 @@ boolean usePerlin = true;
 // How much of a jump through Perlin noise space to make
 float increment = 0.004;
 
-// How far from start of x-axis to retrieve 1D Perlin noise values from
+// How far from start of x-axis to retrieve Perlin noise values from
+float xStart = 0.0;
+
+// Where we are on x-axis in Perlin noise space
 float xOffset = 0.0;
 
+// How far from start of y-axis to retrieve Perlin noise values from
+float yStart = 0.0;
+
+// Where we are on y-axis in Perlin noise space
+float yOffset = 0.0;
 
 // This function runs once only.
 void setup() {
@@ -54,18 +62,45 @@ void keyPressed() {
   // Toggle display of Perlin noise values versus random values
   if (key == 'r') {
     usePerlin = false;
-    background(255);
-    drawAxes();
-    drawValues();
-    redraw();
+    refresh();
   } 
   else if (key == 'p') {
     usePerlin = true;
-    background(255);
-    drawAxes();
-    drawValues();
-    redraw();
+    refresh();
   }
+
+  // Change position in 2D Perlin noise space based on keypresses
+  if (key == CODED) {
+    if (keyCode == RIGHT && xStart < 99) {
+      xStart++;
+      refresh();
+    }
+    if (keyCode == LEFT && xStart > 0) {
+      xStart--;
+      refresh();
+    }
+    if (keyCode == UP && yStart < 99) {
+      yStart++;
+      refresh();
+    }
+    if (keyCode == DOWN && yStart > 0) {
+      yStart--;
+      refresh();
+    }
+  }
+}
+
+// refresh
+//
+// Purpose: Re-draw the grid of values
+// 
+// Parameters: (none)
+void refresh() {
+  // Re-draw grid
+  background(255);
+  drawAxes();
+  drawValues();
+  redraw();
 }
 
 // drawAxes
@@ -108,11 +143,11 @@ void drawValues() {
 
   // Display a grid of the Perlin noise values
   textFont(serif);
-  xOffset = 0.0;
+  xOffset = xStart;
   for (int x = 0; x < 10; x++) {
 
     xOffset += increment; // Increment xOffset with each additional column
-    float yOffset = 0.0;  // For every xOffset (column), start yOffset at 0 (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space)
+    yOffset = yStart;  // For every xOffset (column), start yOffset at yStart (Keep in same patch of Y-axis as we move along X-axis in Perlin noise space)
 
     // Draw x-axis labels as we go
     fill(125); // grey
