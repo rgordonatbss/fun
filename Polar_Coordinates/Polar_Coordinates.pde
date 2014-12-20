@@ -53,8 +53,8 @@ void draw() {
   
   // Get co-ordinates of sinusoidal as it goes around circle
   // Vary r by the amplitude of the green?
-  nx = sy * cos(theta);
-  ny = sy * sin(theta);
+  nx = (sy - height/2) * cos(theta);
+  ny = (sy - height/2) * sin(theta);
   // Draw the circle
   noStroke();
   fill(240, 80, 90); // black
