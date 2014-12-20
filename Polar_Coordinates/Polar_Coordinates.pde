@@ -44,7 +44,7 @@ void draw() {
   sPx = sx;
   sPy = sy;
   sx = sx + 1;
-  sy = 10 * sin(radians(sx/0.25)) + height/2 + r;
+  sy = 10 * sin(radians(sx/(1*(2*PI*r)/360))) + height/2 + r; // Ensures one cycle per 360 degrees
   strokeWeight(4);
   stroke(120, 80, 90); // green
   if (frameCount > 1) line(sPx, sPy, sx, sy);
