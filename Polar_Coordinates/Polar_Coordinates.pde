@@ -15,8 +15,8 @@ void draw() {
 
   noStroke();
   fill(0);
-  ellipse(x+width/2, y+height/2, 16, 16);
+  ellipse(x+width/2, y+height/2, 4, 4);
 
   theta += 0.01;
-  r+=0.1;
+  r=50;
 }
