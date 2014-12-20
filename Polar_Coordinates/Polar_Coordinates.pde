@@ -1,5 +1,5 @@
 // Control size of circle (drawn in black)
-float r = 50;
+float r = 0;
 float theta = 0;
 float x = 0;
 float y = 0;
