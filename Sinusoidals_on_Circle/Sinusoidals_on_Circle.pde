@@ -36,15 +36,27 @@ void setup() {
   colorMode(HSB, 360, 100, 100);
   background(0, 0, 0);
 
+
+  
+}
+
+void draw() {
+  
+  // Wipe background
+  background(0, 0, 0);
+  
   // Follow regular Cartesian plane, origin lower-left
   translate(0, height);
   scale(1, -1);
+  
+  // Used to control amplitude
+  float multiplier = map(mouseX, 0, width, 1, 5);
 
   // Reset all control values
   for (int i = 0; i < patternCount; i ++) {
 
     // Control size of circle (drawn in black)
-    r[i] = 25;
+    r[i] = 50;
     theta[i] = 0;
     x[i] = 0;
     y[i] = 0;
@@ -53,12 +65,12 @@ void setup() {
     lineLength[i] = 0;
 
     // Number of cycles in sinusoidal
-    cycles[i] = 4;
+    cycles[i] = 8;
 
     // Used to draw unwrapped sinusoidal (along red line)
     sx[i] = 0;
     sy[i] = 0;
-    a[i] = 10*(i+1);
+    a[i] = multiplier*(i+1);
 
     // Set up the "unwrapped" sinusoidal, shown in green
     sx[i] = width/2 - PI*r[i];
@@ -107,9 +119,6 @@ void setup() {
     }
   }
   
-}
-
-void draw() {
 }
 
 void keyPressed() {
