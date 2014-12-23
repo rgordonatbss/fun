@@ -17,6 +17,7 @@ float[] cycles = new float[patternCount];
 float[] sx = new float[patternCount];
 float[] sy = new float[patternCount];
 float[] a = new float[patternCount];
+float[] d = new float[patternCount];
 
 // Used to draw wrapped sinusoidal (along black circle)
 float[] nx = new float[patternCount];
@@ -24,6 +25,7 @@ float[] ny = new float[patternCount];
 float[] nPx = new float[patternCount];
 float[] nPy = new float[patternCount];
 float[] hue = new float[patternCount];
+float[] brightness = new float[patternCount];
 
 // What parts of the illustration to draw
 boolean drawCircle = false;
@@ -35,7 +37,9 @@ void setup() {
   size(1000, 800);
   colorMode(HSB, 360, 100, 100);
   background(0, 0, 0);
-
+  
+  // Very smooth line
+  smooth(8);
 
   
 }
@@ -51,6 +55,7 @@ void draw() {
   
   // Used to control amplitude
   float multiplier = map(mouseX, 0, width, 1, 5);
+  float shift = map(mouseY, 0, height, 25, 75);
 
   // Reset all control values
   for (int i = 0; i < patternCount; i ++) {
@@ -65,12 +70,13 @@ void draw() {
     lineLength[i] = 0;
 
     // Number of cycles in sinusoidal
-    cycles[i] = 8;
+    cycles[i] = 4;
 
     // Used to draw unwrapped sinusoidal (along red line)
     sx[i] = 0;
     sy[i] = 0;
     a[i] = multiplier*(i+1);
+    d[i] = shift * i;
 
     // Set up the "unwrapped" sinusoidal, shown in green
     sx[i] = width/2 - PI*r[i];
@@ -81,7 +87,9 @@ void draw() {
     ny[i] = 0;
     nPx[i] = 0;
     nPy[i] = 0;
-    hue[i] = ((360/patternCount)*i) % 360;
+//    hue[i] = ((360/patternCount)*i) % 360;
+    hue[i] = 240 - patternCount/2;
+    brightness[i] = 100 - (i*75)/patternCount;
   }
 
   
@@ -104,7 +112,7 @@ void draw() {
 
       // Characteristics of sinusoidal along "unwrapped" circle (line)
       sx[j] = sx[j] + ((2*PI*r[j])/360);
-      sy[j] = a[j] * sin(radians((sx[j] - cycles[j])/((2*PI*r[j])/(360*cycles[j])))) + height/2 + r[j];
+      sy[j] = a[j] * sin(radians((sx[j] - d[j])/((2*PI*r[j])/(360*cycles[j])))) + height/2 + r[j];
 
       // Get co-ordinates of sinusoidal as it goes around circle
       // Thinking of "r" for the wrapped sinusoidal the vertical
@@ -114,13 +122,15 @@ void draw() {
       nx[j] = (sy[j] - height/2) * cos(radians(theta[j])) + width/2;
       ny[j] = (sy[j] - height/2) * sin(radians(theta[j])) + height/2;
       strokeWeight(2);
-      stroke(hue[j], 80, 90); // blue
+      stroke(hue[j], 80, brightness[j]); // blue
       if (i > 0 && drawSinusoidal && lineLength[j] < 2*(2*PI*r[j])) line(nPx[j], nPy[j], nx[j], ny[j]);
     }
   }
   
 }
 
-void keyPressed() {
+void mousePressed() {
+  
+  saveFrame("output-####.pdf");
 }
 
