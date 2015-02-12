@@ -1,5 +1,5 @@
 // How many versions of pattern to draw
-int patternCount = 50;
+int patternCount = 100;
 
 // Control size of circle (drawn in black)
 float[] r = new float[patternCount];
@@ -34,7 +34,7 @@ boolean drawSinusoidal = true;
 void setup() {
 
   // HSB colour, black background, 1000x800 canvas
-  size(1000, 800);
+  size(2000, 2000);
   colorMode(HSB, 360, 100, 100);
   background(0, 0, 0);
   
@@ -54,14 +54,14 @@ void draw() {
   scale(1, -1);
   
   // Used to control amplitude
-  float multiplier = map(mouseX, 0, width, 1, 5);
-  float shift = map(mouseY, 0, height, 25, 75);
+  float multiplier = map(mouseY, 0, height, 5, 1);
+  float shift = map(mouseX, 0, width, 25, 75);
 
   // Reset all control values
   for (int i = 0; i < patternCount; i ++) {
 
     // Control size of circle (drawn in black)
-    r[i] = 50;
+    r[i] = 500;
     theta[i] = 0;
     x[i] = 0;
     y[i] = 0;
@@ -75,8 +75,8 @@ void draw() {
     // Used to draw unwrapped sinusoidal (along red line)
     sx[i] = 0;
     sy[i] = 0;
-    a[i] = multiplier*(i+1);
-    d[i] = shift * i;
+    a[i] = 1.5*multiplier*(i+1);
+    d[i] = 2*shift * i;
 
     // Set up the "unwrapped" sinusoidal, shown in green
     sx[i] = width/2 - PI*r[i];
@@ -88,49 +88,51 @@ void draw() {
     nPx[i] = 0;
     nPy[i] = 0;
 //    hue[i] = ((360/patternCount)*i) % 360;
-    hue[i] = 240 - patternCount/2;
-    brightness[i] = 100 - (i*75)/patternCount;
+    hue[i] = 240 - patternCount/4;
+//    hue[i] = 0 - patternCount/4;
+    //hue[i] = 300 - patternCount/2;
+//    brightness[i] = 100 - (i*75)/patternCount;
+    brightness[i] = 100 - (i*100)/patternCount;
   }
 
   
   // Move around the circle
-  for (int i = 0; i < 400; i++) { // Go a bit past 360 (one trip round the core circle, so any gaps are filled in)
+  for (int i = 0; i < patternCount; i++) { // Go a bit past 360 (one trip round the core circle, so any gaps are filled in)
 
     // Update each pattern
-    for (int j = 0; j < patternCount; j++) {
+    for (int j = 0; j < 400; j++) {
 
       // Draw the "core" circle that drawing is based around
-      theta[j] += 1;      // Move around the circle (360 degrees)
-      x[j] = r[j] * cos(radians(theta[j])); // Convert from polar co-ordinates (r, theta) to Cartesian 
-      y[j] = r[j] * sin(radians(theta[j])); // See: http://natureofcode.com/book/imgs/chapter03/ch03_08.png
+      theta[i] += 1;      // Move around the circle (360 degrees)
+      x[i] = r[i] * cos(radians(theta[i])); // Convert from polar co-ordinates (r, theta) to Cartesian 
+      y[i] = r[i] * sin(radians(theta[i])); // See: http://natureofcode.com/book/imgs/chapter03/ch03_08.png
       fill(0, 0, 0); // black
       noStroke();
-      if (drawCircle && lineLength[j] < 2*PI*r[j]) ellipse(x[j]+width/2, y[j]+height/2, 4, 4);
+      if (drawCircle && lineLength[i] < 2*PI*r[i]) ellipse(x[i]+width/2, y[i]+height/2, 4, 4);
 
       // Characteristics of unwrapped circle
-      lineLength[j] = (2*PI*r[j])*(theta[j]/360);
+      lineLength[i] = (2*PI*r[i])*(theta[i]/360);
 
       // Characteristics of sinusoidal along "unwrapped" circle (line)
-      sx[j] = sx[j] + ((2*PI*r[j])/360);
-      sy[j] = a[j] * sin(radians((sx[j] - d[j])/((2*PI*r[j])/(360*cycles[j])))) + height/2 + r[j];
+      sx[i] = sx[i] + ((2*PI*r[i])/360);
+      sy[i] = a[i] * sin(radians((sx[i] - d[i])/((2*PI*r[i])/(360*cycles[i])))) + height/2 + r[i];
 
       // Get co-ordinates of sinusoidal as it goes around circle
       // Thinking of "r" for the wrapped sinusoidal the vertical
       // position (sy) of the unwrapped sinusoidal...
-      nPx[j] = nx[j];
-      nPy[j] = ny[j];
-      nx[j] = (sy[j] - height/2) * cos(radians(theta[j])) + width/2;
-      ny[j] = (sy[j] - height/2) * sin(radians(theta[j])) + height/2;
+      nPx[i] = nx[i];
+      nPy[i] = ny[i];
+      nx[i] = (sy[i] - height/2) * cos(radians(theta[i])) + width/2;
+      ny[i] = (sy[i] - height/2) * sin(radians(theta[i])) + height/2;
       strokeWeight(2);
-      stroke(hue[j], 80, brightness[j]); // blue
-      if (i > 0 && drawSinusoidal && lineLength[j] < 2*(2*PI*r[j])) line(nPx[j], nPy[j], nx[j], ny[j]);
+      stroke(hue[i], 80, brightness[i]); // blue
+      if (j > 0 && drawSinusoidal && lineLength[i] < 2*(2*PI*r[i])) line(nPx[i], nPy[i], nx[i], ny[i]);
     }
   }
   
 }
 
-void mousePressed() {
+void keyPressed() {
   
-  saveFrame("output-####.pdf");
+  saveFrame("output-####.png");
 }
-

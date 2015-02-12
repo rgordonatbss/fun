@@ -23,11 +23,11 @@ float nx = 0;
 float ny = 0;
 
 // What parts of the illustration to draw
-boolean drawCircle = true;
-boolean drawUnwrappedCircle = true;
-boolean drawUnwrappedSinusoidal = true;
-boolean drawUnwrappedCircleCentrePoint = true;
-boolean drawSinusoidal = true;
+boolean drawCircle = false;
+boolean drawUnwrappedCircle = false;
+boolean drawUnwrappedSinusoidal = false;
+boolean drawUnwrappedCircleCentrePoint = false;
+boolean drawSinusoidal = false;
 
 void setup() {
 
@@ -105,6 +105,8 @@ void draw() {
   noStroke();
   fill(240, 80, 90); // black
   if (drawSinusoidal && lxEnd < (lxStart + 2*PI*r)) ellipse(nx+width/2, ny+height/2, 4, 4);
+  
+  if (frameCount % 5 == 0) saveFrame("output-#####.gif");
 }
 
 void keyPressed() {
